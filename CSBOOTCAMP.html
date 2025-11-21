@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPulse | Student Risk Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --danger: #dc2626;
+            --warning: #f59e0b;
+            --success: #16a34a;
+            --bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Header Section */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .student-info h1 { margin: 0; font-size: 1.5rem; }
+        .student-info p { margin: 5px 0 0; color: var(--text-muted); }
+        
+        .status-badge {
+            background-color: #fee2e2;
+            color: var(--danger);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .blink { animation: blinker 1.5s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+
+        /* Grid Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* 2 parts data, 1 part actions */
+            gap: 20px;
+        }
+
+        .left-column { display: flex; flex-direction: column; gap: 20px; }
+        .right-column { display: flex; flex-direction: column; gap: 20px; }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-main);
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 10px;
+        }
+
+        /* Risk Score Hero */
+        .risk-hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+        .big-score {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--danger);
+        }
+        .formula-box {
+            background: #1e293b;
+            color: #a5f3fc;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Variable Cards */
+        .variable-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .stat-card {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        .stat-card.red { border-left-color: var(--danger); }
+        .stat-card.yellow { border-left-color: var(--warning); }
+
+        .progress-bar {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        /* Action Buttons */
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        .action-btn:hover { transform: translateY(-2px); }
+        .btn-sms { background-color: var(--primary); color: white; }
+        .btn-visit { background-color: var(--warning); color: white; }
+        .btn-peer { background-color: var(--success); color: white; }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="student-info">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="width: 50px; height: 50px; background: #ddd; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fa-solid fa-user fa-xl"></i>
+                </div>
+                <div>
+                    <h1>Maria Santos</h1>
+                    <p>ID: 2025-091 | Grade 5 - Section Mango | Brgy. Santa Rita</p>
+                </div>
+            </div>
+        </div>
+        <div class="status-badge">
+            <i class="fa-solid fa-circle-exclamation blink"></i>
+            HIGH RISK DETECTED
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+        
+        <div class="left-column">
+            
+            <div class="card">
+                <div class="card-title">Aggregate Risk Score Analysis</div>
+                <div class="risk-hero">
+                    <div style="text-align: center;">
+                        <div class="big-score">0.78</div>
+                        <div style="color: var(--text-muted);">Risk Probability (0-1.0)</div>
+                    </div>
+                    <div style="width: 250px; height: 250px;">
+                        <canvas id="riskRadar"></canvas>
+                    </div>
+                </div>
+                <div style="margin-top: 20px; text-align: center;">
+                    <p style="font-size: 0.9rem; margin-bottom: 5px;">Active Algorithm:</p>
+                    <span class="formula-box">
+                        Risk = α·P<sub>model</sub> + β<sub>A</sub>·A + β<sub>G</sub>·G + β<sub>S</sub>·S + β<sub>B</sub>·B
+                    </span>
+                </div>
+            </div>
+
+            <div class="variable-row">
+                <div class="card stat-card red">
+                    <div style="display:flex; justify-content:space-between;">
+                        <strong>Attendance Risk (A)</strong>
+                        <span style="color:var(--danger); font-weight:bold;">0.85</span>
+                    </div>
+                    <p style="font-size:0.8rem; color:gray;">12 Absences vs Class Min (0)</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 85%; background: var(--danger);"></div>
+                    </div>
+                </div>
+
+                <div class="card stat-card yellow">
+                    <div style="display:flex; justify-content:space-between;">
+                        <strong>Academic Risk (G)</strong>
+                        <span style="color:var(--warning); font-weight:bold;">0.60</span>
+                    </div>
+                    <p style="font-size:0.8rem; color:gray;">Avg Score: 78% (Dropping)</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 60%; background: var(--warning);"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">6-Month Risk Trend</div>
+                <canvas id="trendChart" height="100"></canvas>
+            </div>
+        </div>
+
+        <div class="right-column">
+            
+            <div class="card">
+                <div class="card-title">Recommended Interventions</div>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px;">
+                    AI suggests these actions based on high 'A' and 'S' scores.
+                </p>
+
+                <button class="action-btn btn-sms" onclick="alert('SMS Drafted: Hello Mrs. Santos, we noticed Maria has missed...')">
+                    <i class="fa-solid fa-comment-sms"></i>
+                    Draft Parent SMS (Tagalog)
+                </button>
+
+                <button class="action-btn btn-visit" onclick="alert('Scheduled Home Visit for Tuesday.')">
+                    <i class="fa-solid fa-house-user"></i>
+                    Schedule Home Visit
+                </button>
+
+                <button class="action-btn btn-peer">
+                    <i class="fa-solid fa-book-open"></i>
+                    Assign Peer Tutor
+                </button>
+
+                <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
+                
+                <div class="card-title" style="font-size: 1rem;">Log Manual Entry</div>
+                <select style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ddd; margin-bottom: 10px;">
+                    <option>Select Action...</option>
+                    <option>Counseling Session</option>
+                    <option>Provided School Supplies</option>
+                    <option>Health Checkup</option>
+                </select>
+                <button style="width: 100%; padding: 10px; background: #1f2937; color: white; border: none; border-radius: 6px;">Log Activity</button>
+            </div>
+
+            <div class="card" style="background: #eff6ff; border: 1px solid #bfdbfe;">
+                <div style="display: flex; gap: 10px;">
+                    <i class="fa-solid fa-robot" style="color: var(--primary); margin-top: 4px;"></i>
+                    <div>
+                        <strong>Model Insight</strong>
+                        <p style="font-size: 0.85rem; margin-top: 5px;">
+                            Pattern Match: Students with this attendance drop (A > 0.8) usually require financial aid for transportation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // 1. RADAR CHART CONFIGURATION (The Spider Web)
+        const ctxRadar = document.getElementById('riskRadar').getContext('2d');
+        new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: ['Attendance (A)', 'Grades (G)', 'Socio-Eco (S)', 'Behavior (B)', 'AI Model (P)'],
+                datasets: [{
+                    label: 'Current Student Profile',
+                    data: [0.85, 0.60, 0.90, 0.10, 0.72], // These match your mock data
+                    fill: true,
+                    backgroundColor: 'rgba(220, 38, 38, 0.2)', // Red tint
+                    borderColor: 'rgb(220, 38, 38)',
+                    pointBackgroundColor: 'rgb(220, 38, 38)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(220, 38, 38)'
+                }]
+            },
+            options: {
+                scales: {
+                    r: {
+                        angleLines: { display: false },
+                        suggestedMin: 0,
+                        suggestedMax: 1
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // 2. LINE CHART CONFIGURATION (The History)
+        const ctxLine = document.getElementById('trendChart').getContext('2d');
+        new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'],
+                datasets: [{
+                    label: 'Risk Score Trend',
+                    data: [0.3, 0.35, 0.4, 0.55, 0.82, 0.78], // Shows score going up then stabilizing
+                    borderColor: 'rgb(37, 99, 235)',
+                    tension: 0.3,
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true, max: 1.0 }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
